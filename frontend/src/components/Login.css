@@ -1,0 +1,88 @@
+.loginform {
+  border: 2px solid;
+  border-radius: 10px;
+  padding-top: 10%;
+  padding-bottom: 10%;
+
+  background: transparent;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.loginform h2 {
+  color: white;
+  margin-bottom: 10%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  width: 350px;
+}
+
+.input {
+  width: 75%;
+}
+
+input {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 10px 10px 10px 5px;
+  margin: 2%;
+  font-size: 15px;
+  width: 75%;
+  background-color: inherit;
+  color: white;
+}
+
+.sub {
+  padding: 3%;
+  font-size: medium;
+  margin-top: 10%;
+}
+
+input::placeholder {
+  color: white;
+}
+
+#noacc {
+  color: white;
+  font-size: small;
+}
+
+#noacc img {
+  width: 10px;
+  height: 10px;
+  margin: 0px 3px 0px 3px;
+}
+
+#reglink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.log {
+  align-self: first baseline;
+  margin-left: 12.5%;
+  color:white;
+  margin-top: 3%;
+}
+
+.forgpw {
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.pw {
+  margin-top: 2%;
+}
+
+#forgotten {
+  color: white;
+  margin-top: 2%;
+}
