@@ -1,8 +1,26 @@
+.logreg {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url("../public/background2.jpg");
+  position: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: black;
+}
+
 .loginform {
-  border: 2px solid;
+  text-align: center;
+  border: 2px solid gray;
   border-radius: 10px;
-  padding-top: 10%;
-  padding-bottom: 10%;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+  width: 350px;
 
   background: transparent;
   backdrop-filter: blur(20px);
@@ -12,7 +30,6 @@
 }
 
 .loginform h2 {
-  color: white;
   margin-bottom: 10%;
 }
 
@@ -28,14 +45,13 @@
 }
 
 input {
-  border: 1px solid;
+  border: 1px solid black;
   border-radius: 10px;
   padding: 10px 10px 10px 5px;
   margin: 2%;
   font-size: 15px;
   width: 75%;
   background-color: inherit;
-  color: white;
 }
 
 .sub {
@@ -45,11 +61,10 @@ input {
 }
 
 input::placeholder {
-  color: white;
+  color: inherit;
 }
 
 #noacc {
-  color: white;
   font-size: small;
 }
 
@@ -67,7 +82,6 @@ input::placeholder {
 .log {
   align-self: first baseline;
   margin-left: 12.5%;
-  color:white;
   margin-top: 3%;
 }
 
@@ -75,7 +89,6 @@ input::placeholder {
   width: 75%;
   display: flex;
   justify-content: space-between;
-  color: white;
 }
 
 .pw {
@@ -83,6 +96,5 @@ input::placeholder {
 }
 
 #forgotten {
-  color: white;
   margin-top: 2%;
 }

@@ -1,4 +1,3 @@
-import react from "react";
 import pic from '../../public/pic.png'
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -16,25 +15,36 @@ function Register() {
 
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        const existingUser = JSON.parse(localStorage.getItem(data.email));
-        if (existingUser) {
-            console.log("email is already in use");
-            return;
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch("http://localhost:3001/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                })
+            });
+
+            const result = await response.json();
+
+            if(response.ok) {
+                alert("Registered successfully");
+                navigate(ROUTES.LOGIN);
+            }else {
+                alert("failed: " + result.message);
+            }
+        } catch (err) {
+            console.error("connection problem, ", err);
         }
-
-        const userData = {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-        };
-
-        localStorage.setItem(data.email, JSON.stringify(userData));
-        navigate(ROUTES.LOGIN);
     };
 
     return (
         <>
+        <div className="logreg">
             <div className="loginform">
                 <h2>Register</h2>
 
@@ -53,7 +63,7 @@ function Register() {
                         placeholder="Email"
                         autoComplete="email"
                     />
-                    {errors.name && <span>email is mandatory</span>}
+                    {errors.email && <span>email is mandatory</span>}
 
                     <p className="log">Password*</p>
                     <input type="password"
@@ -61,13 +71,13 @@ function Register() {
                         placeholder="Password"
                         autoComplete="new-password"
                     />
-                    {errors.name && <span>Password is mandatory</span>}
+                    {errors.password && <span>Password is mandatory</span>}
 
                     <p id="noacc">Already have an account?<img src={pic} /><Link to="/login" id="reglink">log in</Link></p>
                     <input type="submit" value="Create account" className="sub"/>
                 </form>
             </div>
-            
+        </div>
         </>
     )
 }

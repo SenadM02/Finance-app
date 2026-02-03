@@ -1,4 +1,3 @@
-import react from 'react';
 import { useNavigate } from "react-router-dom";
 import pic from '../../public/pic.png'
 import { Link } from "react-router-dom";
@@ -14,32 +13,39 @@ function Login() {
         formState: { errors },
     } = useForm();
 
-    const generateToken = () => {
-        return crypto.randomUUID(); 
-    };
-
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        const userData = JSON.parse(localStorage.getItem(data.email));
-        if(userData){
-            if(userData.password === data.password) {
-                const token = generateToken();
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch("http://localhost:3001/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                })
+            });
 
-                localStorage.setItem("authToken", token);
+            const result = await response.json();
+
+            if(response.ok) {
+                localStorage.setItem("authToken", result.token || "logged_in");
                 localStorage.setItem("userEmail", data.email);
 
                 navigate(ROUTES.HOME);
             }else {
-                console.log("Wrong password");
+                alert(result.message);
             }
-        } else {
-            console.log("Email not registered");
+        } catch(err) {
+            console.error("error: ", err);
         }
     }
 
     return (
         <>
+        <div className="logreg">
             <div className="loginform">
                 <h2>Login</h2>
 
@@ -69,6 +75,7 @@ function Login() {
                     <p id="noacc">Don't have an account?<img src={pic} /><Link to="/register" id="reglink">Register here</Link></p>
                 </form>
             </div>
+        </div>    
         </>
     );
 }
