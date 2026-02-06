@@ -1,18 +1,208 @@
 .homepage {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
+    height: auto;
     width: 100%;
+    background-color: rgba(255, 255, 255, 0.883);
 }
 
 .navbar {
     width: 100%;
+    height: 50px;
+    background-color: white;
+}
+
+.navbar h2 {
+    padding: 5px 0px 5px 10px;
+}
+
+.buttons button {
+    height: 50px;
+}
+
+.addTrans h2{
+    text-align: center;
+}
+
+.body {
     display: flex;
+    flex-grow: 1;
+    align-items: stretch;
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile {
+    width: 200px;
+    background-color: white;
+    display: flex;
+    
+    flex-direction: column;
     justify-content: space-between;
+    text-align: center;
+    padding: 2% 2% 2% 2%;
+    margin-top: 2px;
 }
 
-.navbar button {
-    color: white;
+.profile button {
+    width: 125px;
 }
 
-@media (max-width: 600px) {
+.profile p {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
 
+.saldos {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.balanceBox {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 1% 1% 1% 0%;
+    background-color: white;
+    width: 33%;
+    height: 100px;
+    font-size: 20px;
+    display:flex;
+    vertical-align: middle;
+}
+
+.balanceBox img {
+    height: 75px;
+    width: 75px;
+    padding: 0;
+    margin-right: 0;
+}
+
+.text {
+    padding-left: 10px;
+}
+
+.text p {
+    font-weight: 200;
+    font-size: 25px;
+}
+
+.text h2 {
+    font-weight: 500;
+    font-size: 25px;
+}
+
+.formAndTable {
+    display: flex;
+    flex-direction: row;
+}
+
+.addTrans {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 40%;
+    height: 350px;
+    margin: 0px 10px 5px 5px;
+    background-color: white;
+}
+
+.tableTrans {
+    border-radius: 10px;
+    text-align: center;
+    width: 60%;
+    height: 350px;
+    margin: 0px 5px 5px 10px;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tableTrans table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableTrans tbody {
+    vertical-align: top;
+}
+
+.tableTrans td {
+    width: 25%;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.tableTrans th {
+    padding: 2px;
+    width: 25%;
+    font-size: 20px;
+}
+
+.cell-content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+#actionButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#actionButtons img {
+    height: 20px;
+    width: 20px;
+}
+
+.edit {
+    padding: 0;
+}
+
+select {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 10px 10px 5px;
+    margin: 2%;
+    font-size: 15px;
+    width: 75%;
+    background-color: inherit;
+}
+
+select, #submit {
+    cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+    .profile {
+        display: none;
+    }
+    .balanceBox img {
+        width: 65px;
+        height: 65px;
+    }
+    .balanceBox {
+        height: 90px;
+    }
+    .text p {
+        font-size: 20px;
+    }
+
+    .text h2 {
+        font-size: 20px;
+    }
 }
