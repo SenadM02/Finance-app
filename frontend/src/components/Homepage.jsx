@@ -15,6 +15,7 @@ function Homepage() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm();
 
@@ -30,13 +31,19 @@ function Homepage() {
     const [Income, setIncome] = useState(0);
     const [Expense, setExpense] = useState(0);
     const userEmail = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('authToken');
 
     const Balance = (Number(Income) - Number(Expense)).toFixed(2);
 
     useEffect( () => {
         const fetchUserName = async () => {
             try {
-                const response = await fetch("http://localhost:3001/api/auth/user/" + userEmail);
+                const response = await fetch("http://localhost:3001/api/auth/user", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token
+                    }
+                });
                 const data = await response.json();
 
                 if(data.name){
@@ -47,13 +54,18 @@ function Homepage() {
                 setUserName("User");
             }
         };
-        if(userEmail) fetchUserName();
-    }, [userEmail]);
+        if(token) fetchUserName();
+    }, [token]);
 
     useEffect( () => {
         const fetchIncome = async () => {
             try{
-                const response = await fetch("http://localhost:3001/api/auth/transactions/Income/" + userEmail)
+                const response = await fetch("http://localhost:3001/api/auth/transactions/Income/", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token
+                    }
+                });
                 const data = await response.json();
 
                 if(data.sum){
@@ -64,13 +76,18 @@ function Homepage() {
                 setIncome(0);
             }
         }
-        if(userEmail) fetchIncome();
-    }, [userEmail]);
+        if(token) fetchIncome();
+    }, [token]);
 
     useEffect( () => {
         const fetchExpense = async () => {
             try{
-                const response = await fetch("http://localhost:3001/api/auth/transactions/Expense/" + userEmail)
+                const response = await fetch("http://localhost:3001/api/auth/transactions/Expense/", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token
+                    }
+                });
                 const data = await response.json();
 
                 if(data.sum){
@@ -81,13 +98,18 @@ function Homepage() {
                 setExpense(0);
             }
         }
-        if(userEmail) fetchExpense();
-    }, [userEmail]);
+        if(token) fetchExpense();
+    }, [token]);
 
     useEffect( () => {
         const fetchTrans = async () => {
             try{
-                const response = await fetch ("http://localhost:3001/api/auth/transactions/" + userEmail);
+                const response = await fetch ("http://localhost:3001/api/auth/transactions", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token
+                    }
+                });
                 const data = await response.json();
                 if(Array.isArray(data)){
                     setTransactions(data);
@@ -99,8 +121,8 @@ function Homepage() {
                 console.error("error: ", err);
             }
         };
-        if(userEmail) fetchTrans();
-    }, [userEmail]);
+        if(token) fetchTrans();
+    }, [token]);
 
     const onSubmit = async (data) => {
         const newEntry = {
@@ -113,25 +135,23 @@ function Homepage() {
         try{
             const response = await fetch("http://localhost:3001/api/auth/transactions", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: localStorage.getItem('userEmail'),
-                    ...newEntry
-                })
+                headers: { "Content-Type": "application/json",
+                    "Authorization": token
+                },
+                body: JSON.stringify(newEntry)
             });
 
             if(response.ok){
                 setTransactions((prev) => [newEntry, ...prev]);
 
                 if(newEntry.type === "Income"){
-                    setIncome((prev) => (Number(prev) + newEntry.amount)).toFixed(2);
+                    setIncome((prev) => (Number(prev) + newEntry.amount).toFixed(2));
                 }else if (newEntry.type === "Expense"){
-                    setExpense((prev) => (Number(prev) + newEntry.amount)).toFixed(2);
+                    setExpense((prev) => (Number(prev) + newEntry.amount).toFixed(2));
                 }
 
-                reset(); 
+                reset();
             }
-
         }catch(err){
             console.error("Connection problem");
         }
@@ -142,10 +162,11 @@ function Homepage() {
 
         if(confirm){
             try{
-                const response = await fetch("http://localhost:3001/api/auth/row/delete/", {
+                const response = await fetch("http://localhost:3001/api/auth/row/delete", {
                     method: 'DELETE',
                     headers: {
-                        'Content-Type': 'applications/json'
+                        'Content-Type': 'applications/json',
+                        "Authorization": token
                     }
                 });
                 
@@ -160,10 +181,11 @@ function Homepage() {
 
         if(confirm){
             try{
-                const response = await fetch("http://localhost:3001/api/auth/clear/" + userEmail, {
+                const response = await fetch("http://localhost:3001/api/auth/clear", {
                     method: 'DELETE',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        "Authorization": token
                     }
                 });
                 if(response.ok){

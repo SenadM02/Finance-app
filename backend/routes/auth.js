@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import db from '../config/db.js';
 import express from "express";
+import jwt from 'jsonwebtoken';
+import { verifyToken } from "../middleware.js";
 
 const router = express.Router();
 
@@ -15,11 +17,18 @@ router.post("/login", async (req, res) => {
 
         const user = result[0];
 
-        const isMatch = bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if(isMatch){
+            const token = jwt.sign(
+                { id: user.id, email: user.email }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: "96h" }
+            );
             res.status(200).json({
-                message: "success"
+                message: "success",
+                token: token,
+                email: user.email
             });
         }else {
             res.status(401).json({ message: "wrong password" });
@@ -52,8 +61,9 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/transactions", async (req, res) => {
-    const {email, amount, type, description} = req.body;
+router.post("/transactions", verifyToken, async (req, res) => {
+    const {amount, type, description} = req.body;
+    const email = req.user.email;
     try{
         db.query("SELECT id FROM users WHERE email = ?", [email], (err, result) => {
             if(err) return res.status(404).json({ message: err.message });
@@ -65,24 +75,22 @@ router.post("/transactions", async (req, res) => {
                 res.status(201).json({ message: "Transaction added" });
             });
         })
-    
-        
     }catch(err){
         res.status(500).json({ message: err.message });
     }
 })
 
-router.get("/transactions/:email", (req, res) => {
-    const email = req.params.email;
+router.get("/transactions", verifyToken, (req, res) => {
+    const userEmail = req.user.email;
 
-    db.query("SELECT transactions.* from transactions JOIN users on transactions.user_id=users.id WHERE users.email = ? ORDER BY transactions.id desc", [email], (err, result) => {
+    db.query("SELECT transactions.* from transactions JOIN users on transactions.user_id=users.id WHERE users.email = ? ORDER BY transactions.id desc", [userEmail], (err, result) => {
         if(err) res.status(500).json({ message: err.message });
         res.json(result);
     })
 })
 
-router.get("/user/:email", (req, res) => {
-    const email = req.params.email;
+router.get("/user", verifyToken, (req, res) => {
+    const email = req.user.email;
 
     db.query("SELECT users.name FROM users where email=?", [email], (err, result) => {
         if(err) return res.status(500).json({ message: err.message });
@@ -94,8 +102,8 @@ router.get("/user/:email", (req, res) => {
     })
 })
 
-router.get("/transactions/:type/:email", (req, res) => {
-    const email = req.params.email;
+router.get("/transactions/:type", verifyToken, (req, res) => {
+    const email = req.user.email;
     const type = req.params.type;
 
     db.query("SELECT SUM(t.amount) as sum from transactions t join users on t.user_id=users.id where email=? and type=?", [email, type], (err, result) =>{
@@ -107,8 +115,8 @@ router.get("/transactions/:type/:email", (req, res) => {
     })
 })
 
-router.delete("/clear/:email", (req, res) => {
-    const email = req.params.email;
+router.delete("/clear", verifyToken, (req, res) => {
+    const email = req.user.email;
 
     db.query("DELETE t FROM transactions t JOIN users ON t.user_id=users.id WHERE email=?", [email], (err, result) => {
         if(err) res.status(500).json({ message: err.message });
