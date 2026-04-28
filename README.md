@@ -1,16 +1,63 @@
-# React + Vite
+# Finance App
+ 
+A full-stack personal finance tracker for managing income and expenses. Users can register, log in, and track transactions with a running balance.
+ 
+## Tech Stack
+ 
+**Frontend:** React 19, React Router, React Hook Form, Vite  
+**Backend:** Node.js, Express 5, MySQL, JWT authentication, bcrypt
+ 
+## Features
+ 
+- User registration and login
+- Add income and expense transactions
+- View transaction history
+- See total income, total expenses, and current balance
+- Delete individual transactions or clear all at once
+- Protected routes — only accessible when logged in
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Prerequisites
+ 
+- Node.js
+- MySQL
+### 1. Clone the repo
+ 
+```bash
+git clone https://github.com/your-username/Finance-app.git
+cd Finance-app
+```
 
-Currently, two official plugins are available:
+### 2. Set up the database
+ 
+Create a MySQL database and run your schema. Then create `backend/.env`:
+ 
+```env
+JWT_SECRET=your_secret_key
+DB_HOST=localhost
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=finance_app
+PORT=3001
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 3. Start the backend
+ 
+```bash
+cd backend
+npm install
+node server.js
+```
+ 
+### 4. Start the frontend
+ 
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Create `frontend/.env`:
+ 
+```env
+VITE_API_URL=http://localhost:3001
+```
