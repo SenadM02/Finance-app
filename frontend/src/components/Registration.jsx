@@ -17,10 +17,10 @@ function Register() {
 
     const onSubmit = async (data) => {
         try {
-            const response = await fetch("http://localhost:3001/api/auth/register", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
                 method: "POST",
                 headers: {
-                    "content-Type": "application/json",
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     name: data.name,

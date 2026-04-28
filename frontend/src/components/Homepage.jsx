@@ -38,7 +38,7 @@ function Homepage() {
     useEffect( () => {
         const fetchUserName = async () => {
             try {
-                const response = await fetch("http://localhost:3001/api/auth/user", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user`, {
                     method: "GET",
                     headers: {
                         "Authorization": token
@@ -60,7 +60,7 @@ function Homepage() {
     useEffect( () => {
         const fetchIncome = async () => {
             try{
-                const response = await fetch("http://localhost:3001/api/auth/transactions/Income/", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions/Income/`, {
                     method: "GET",
                     headers: {
                         "Authorization": token
@@ -82,7 +82,7 @@ function Homepage() {
     useEffect( () => {
         const fetchExpense = async () => {
             try{
-                const response = await fetch("http://localhost:3001/api/auth/transactions/Expense/", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions/Expense/`, {
                     method: "GET",
                     headers: {
                         "Authorization": token
@@ -104,7 +104,7 @@ function Homepage() {
     useEffect( () => {
         const fetchTrans = async () => {
             try{
-                const response = await fetch ("http://localhost:3001/api/auth/transactions", {
+                const response = await fetch (`${import.meta.env.VITE_API_URL}/api/auth/transactions`, {
                     method: "GET",
                     headers: {
                         "Authorization": token
@@ -133,7 +133,7 @@ function Homepage() {
         }
 
         try{
-            const response = await fetch("http://localhost:3001/api/auth/transactions", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json",
                     "Authorization": token
@@ -162,7 +162,7 @@ function Homepage() {
 
         if(confirm){
             try{
-                const response = await fetch("http://localhost:3001/api/auth/row/delete", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/row/delete`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'applications/json',
@@ -181,7 +181,7 @@ function Homepage() {
 
         if(confirm){
             try{
-                const response = await fetch("http://localhost:3001/api/auth/clear", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/clear`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

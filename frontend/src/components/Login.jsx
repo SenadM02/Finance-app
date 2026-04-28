@@ -17,7 +17,7 @@ function Login() {
 
     const onSubmit = async (data) => {
         try {
-            const response = await fetch("http://localhost:3001/api/auth/login", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -57,7 +57,7 @@ function Login() {
                         className="input"
                         placeholder="Email"
                     />
-                    {errors.name && <span>Email is mandatory</span>}
+                    {errors.email && <span>Email is mandatory</span>}
 
                     <div className="forgpw">
                         <p className="pw">Password</p><p id="forgotten">Forgot password?</p>
@@ -68,7 +68,7 @@ function Login() {
                         className="input"
                         placeholder="Password"
                     />
-                    {errors.name && <span>Password is mandatory</span>}
+                    {errors.password && <span>Password is mandatory</span>}
                     
 
                     <input type="submit" value="Log in" className="sub"/>

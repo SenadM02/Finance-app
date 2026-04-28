@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .vite
+.env
+.env.production
+frontend/.env
+frontend/.env.production
