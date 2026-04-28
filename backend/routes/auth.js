@@ -25,15 +25,22 @@ router.post("/login", async (req, res) => {
                 process.env.JWT_SECRET, 
                 { expiresIn: "96h" }
             );
-            res.status(200).json({
-                message: "success",
-                token: token,
-                email: user.email
+            res.cookie("authToken", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+                maxAge: 96 * 60 * 60 * 1000
             });
+            res.status(200).json({ message: "success", email: user.email });
         }else {
             res.status(401).json({ message: "wrong password" });
         }
     });
+});
+
+router.post("/logout", (req, res) => {
+    res.clearCookie("authToken");
+    res.json({ message: "Logged out" });
 });
 
 router.post("/register", async (req, res) => {

@@ -22,6 +22,7 @@ function Login() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify({
                     email: data.email,
                     password: data.password,
@@ -31,8 +32,7 @@ function Login() {
             const result = await response.json();
 
             if(response.ok) {
-                localStorage.setItem("authToken", result.token || "logged_in");
-                localStorage.setItem("userEmail", data.email);
+                localStorage.setItem("isLoggedIn", "true");
 
                 navigate(ROUTES.HOME);
             }else {

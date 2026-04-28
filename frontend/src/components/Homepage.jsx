@@ -20,9 +20,13 @@ function Homepage() {
     } = useForm();
 
     const navigate = useNavigate();
-    const logOut = () => {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userEmail")
+
+    const logOut = async () => {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+        localStorage.removeItem("isLoggedIn");
         navigate(ROUTES.LOGIN);
     }
 
@@ -30,88 +34,75 @@ function Homepage() {
     const [userName, setUserName] = useState("...");
     const [Income, setIncome] = useState(0);
     const [Expense, setExpense] = useState(0);
-    const userEmail = localStorage.getItem('userEmail');
-    const token = localStorage.getItem('authToken');
 
     const Balance = (Number(Income) - Number(Expense)).toFixed(2);
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchUserName = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user`, {
                     method: "GET",
-                    headers: {
-                        "Authorization": token
-                    }
+                    credentials: "include"
                 });
                 const data = await response.json();
-
-                if(data.name){
+                if (data.name) {
                     setUserName(data.name);
-                } 
-            }catch(err){
+                }
+            } catch(err) {
                 console.error("error:", err);
                 setUserName("User");
             }
         };
-        if(token) fetchUserName();
-    }, [token]);
+        fetchUserName();
+    }, []);
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchIncome = async () => {
-            try{
+            try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions/Income/`, {
                     method: "GET",
-                    headers: {
-                        "Authorization": token
-                    }
+                    credentials: "include"
                 });
                 const data = await response.json();
-
-                if(data.sum){
+                if (data.sum) {
                     setIncome(data.sum);
                 }
-            }catch(err){
+            } catch(err) {
                 console.error("error: ", err);
                 setIncome(0);
             }
         }
-        if(token) fetchIncome();
-    }, [token]);
+        fetchIncome();
+    }, []);
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchExpense = async () => {
-            try{
+            try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions/Expense/`, {
                     method: "GET",
-                    headers: {
-                        "Authorization": token
-                    }
+                    credentials: "include"
                 });
                 const data = await response.json();
-
-                if(data.sum){
+                if (data.sum) {
                     setExpense(data.sum);
                 }
-            }catch(err){
+            } catch(err) {
                 console.error("error: ", err);
                 setExpense(0);
             }
         }
-        if(token) fetchExpense();
-    }, [token]);
+        fetchExpense();
+    }, []);
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchTrans = async () => {
-            try{
-                const response = await fetch (`${import.meta.env.VITE_API_URL}/api/auth/transactions`, {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions`, {
                     method: "GET",
-                    headers: {
-                        "Authorization": token
-                    }
+                    credentials: "include"
                 });
                 const data = await response.json();
-                if(Array.isArray(data)){
+                if (Array.isArray(data)) {
                     setTransactions(data);
                 } else {
                     console.error("Server returned an error object:", data);
@@ -121,8 +112,8 @@ function Homepage() {
                 console.error("error: ", err);
             }
         };
-        if(token) fetchTrans();
-    }, [token]);
+        fetchTrans();
+    }, []);
 
     const onSubmit = async (data) => {
         const newEntry = {
@@ -132,27 +123,26 @@ function Homepage() {
             date: new Date().toISOString()
         }
 
-        try{
+        try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/transactions`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json",
-                    "Authorization": token
-                },
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(newEntry)
             });
 
-            if(response.ok){
+            if (response.ok) {
                 setTransactions((prev) => [newEntry, ...prev]);
 
-                if(newEntry.type === "Income"){
+                if (newEntry.type === "Income") {
                     setIncome((prev) => (Number(prev) + newEntry.amount).toFixed(2));
-                }else if (newEntry.type === "Expense"){
+                } else if (newEntry.type === "Expense") {
                     setExpense((prev) => (Number(prev) + newEntry.amount).toFixed(2));
                 }
 
                 reset();
             }
-        }catch(err){
+        } catch(err) {
             console.error("Connection problem");
         }
     };
@@ -160,17 +150,14 @@ function Homepage() {
     const onDelete = async () => {
         const confirm = window.confirm("Are you sure?");
 
-        if(confirm){
-            try{
+        if (confirm) {
+            try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/row/delete`, {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'applications/json',
-                        "Authorization": token
-                    }
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: "include"
                 });
-                
-            } catch(err){
+            } catch(err) {
                 console.error("Error:", err);
             }
         }
@@ -179,21 +166,19 @@ function Homepage() {
     const clearTrans = async () => {
         const confirm = window.confirm("This cant be undone");
 
-        if(confirm){
-            try{
+        if (confirm) {
+            try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/clear`, {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": token
-                    }
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: "include"
                 });
-                if(response.ok){
+                if (response.ok) {
                     setTransactions([]);
                     setIncome(0);
                     setExpense(0);
                 }
-            }catch(err){
+            } catch(err) {
                 console.error("error: ", err);
             }
         }
